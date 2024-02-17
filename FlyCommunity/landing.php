@@ -23,8 +23,14 @@ $aerei = json_decode(file_get_contents($aereiFile), true);
 
     <title>Scontrino</title>
 </head>
-
+    <header>
+        <nav>
+            <a href="landing.php">Elenco Aerei</a>
+            <a href="aggiungi_aereo.php">Aggiungi Aereo</a>
+        </nav>
+    </header>
 <body>
+    
     <h1>FlyCommunity</h1>
     <h2>Aerei</h2>
     <table border="1">
@@ -33,6 +39,7 @@ $aerei = json_decode(file_get_contents($aereiFile), true);
             <th>Marca</th>
             <th>Modello</th>
             <th>Indirizzo</th>
+            <th>Utente</th>
         </tr>
         <?php
         // Verifica se ci sono dati degli aerei disponibili
@@ -43,6 +50,7 @@ $aerei = json_decode(file_get_contents($aereiFile), true);
                 echo "<td>{$aereo['Marca']}</td>";
                 echo "<td>{$aereo['Modello']}</td>";
                 echo "<td>{$aereo['Indirizzo']}</td>";
+                echo "<td>{$aereo['Username']}</td>";
                 echo "</tr>";
             }
         } else {

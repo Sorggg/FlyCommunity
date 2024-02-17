@@ -13,6 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {
     } else {
         // Aggiunge l'utente al file JSON
         $users[$username] = $password;
+        $_SESSION['username'] = $_POST['username'];
         file_put_contents($usersFile, json_encode($users));
         $_SESSION['logged_in'] = true;
         header("Location: landing.php");

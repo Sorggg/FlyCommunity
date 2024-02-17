@@ -1,4 +1,5 @@
 <?php
+session_start();
 $usersFile = 'utenti.json';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
@@ -6,9 +7,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
     $password = $_POST['password'];
 
     $users = json_decode(file_get_contents($usersFile), true);
-
+    
     if (isset($users[$username]) && $users[$username] === $password) {
         $_SESSION['logged_in'] = true;
+        $_SESSION['username'] = $username;
         header("Location: landing.php");
         exit();
     } else {
