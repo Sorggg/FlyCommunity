@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
 
     if (isset($users[$username]) && $users[$username] === $password) {
         $_SESSION['logged_in'] = true;
-        header("Location: ordinazione.php");
+        header("Location: landing.php");
         exit();
     } else {
         echo "Username o password sbagliati.";
@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
     <title>Login</title>
 </head>
 <body>
-    <h1>Ciò che non strozza ingrassa!</h1>
+    <h1>Benvenuto nella FlyCommunity</h1>
     <h2>Login</h2>
     <form method="post" action="">
         <label for="username">Username</label>
@@ -35,5 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
         <input type="password" name="password" id="password" required>
         <input type="submit" name="login" value="Login">
     </form>
+
+    <p>Non hai un account? <a href="registrazione.php">Registrati qui</a>.</p>
 </body>
 </html>

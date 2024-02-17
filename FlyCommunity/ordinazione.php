@@ -6,6 +6,9 @@ session_start();
 if (!isset($_SESSION['orderData'])) {
     $_SESSION['orderData'] = array();
 }
+if (!isset($_SESSION['orderData'])) {
+    $_SESSION['orderData'] = array();
+}
 if (!isset($_SESSION['numOrdine'])) {
     $_SESSION['numOrdine'] = 0;
 }
