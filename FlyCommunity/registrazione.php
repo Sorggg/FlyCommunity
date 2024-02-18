@@ -1,20 +1,43 @@
 <?php
-$usersFile = 'utenti.json';
+session_start();
+
+// Configurazione del database
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "aereiDB";
+
+try {
+    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    echo "Connessione al database fallita: " . $e->getMessage();
+    die();
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    $users = json_decode(file_get_contents($usersFile), true);
+    // Utilizza una query parametrizzata per evitare SQL injection
+    $stmt = $conn->prepare("SELECT * FROM utenti WHERE username = :username");
+    $stmt->bindParam(':username', $username);
+    $stmt->execute();
 
     // Verifica se l'utente esiste già
-    if (isset($users[$username])) {
+    if ($stmt->rowCount() > 0) {
         echo "Username già in uso. Scegli un altro.";
     } else {
-        // Aggiunge l'utente al file JSON
-        $users[$username] = $password;
+        // Hash della password
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+        // Aggiunge l'utente al database con la password hashata
+        $stmt = $conn->prepare("INSERT INTO utenti (username, password) VALUES (:username, :password)");
+        $stmt->bindParam(':username', $username);
+        $stmt->bindParam(':password', $hashedPassword);
+        $stmt->execute();
+
         $_SESSION['username'] = $_POST['username'];
-        file_put_contents($usersFile, json_encode($users));
         $_SESSION['logged_in'] = true;
         header("Location: landing.php");
         exit();

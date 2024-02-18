@@ -1,14 +1,32 @@
 <?php
 session_start();
-$usersFile = 'utenti.json';
+
+// Configurazione del database
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "aereiDB";
+
+try {
+    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    echo "Connessione al database fallita: " . $e->getMessage();
+    die();
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    $users = json_decode(file_get_contents($usersFile), true);
-    
-    if (isset($users[$username]) && $users[$username] === $password) {
+    // Utilizza una query parametrizzata per evitare SQL injection
+    $stmt = $conn->prepare("SELECT * FROM utenti WHERE username = :username");
+    $stmt->bindParam(':username', $username);
+    $stmt->execute();
+
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($user && password_verify($password, $user['Password'])) {
         $_SESSION['logged_in'] = true;
         $_SESSION['username'] = $username;
         header("Location: landing.php");
@@ -17,8 +35,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
         echo "Username o password sbagliati.";
     }
 }
-
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
