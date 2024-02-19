@@ -72,6 +72,7 @@ if (isset($_POST['search'])) {
             <th>Indirizzo</th>
             <th>Utente</th>
             <th>Azioni</th>
+            
         </tr>
         <?php
         // Verifica se ci sono dati degli aerei disponibili
@@ -81,7 +82,7 @@ if (isset($_POST['search'])) {
                 echo "<td>{$aereo['Id']}</td>";
                 echo "<td>{$aereo['Marca']}</td>";
                 echo "<td>{$aereo['Modello']}</td>";
-                echo "<td>{$aereo['Indirizzo']}</td>";
+                echo "<td><a href='{$aereo['Indirizzo']}' target='_blank'>{$aereo['Indirizzo']}</a></td>";
                 echo "<td>{$aereo['Utente']}</td>";
 
                 // Verifica se l'utente loggato corrisponde all'utente dell'aereo
